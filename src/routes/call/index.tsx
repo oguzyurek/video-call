@@ -29,6 +29,16 @@ export default function Call() {
   } = participantsStore();
   const { callId } = useParams();
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+  React.useEffect(() => {
+    const interval = setInterval(
+      () => removeInactiveParticipants(setParticipants),
+      500
+    );
+=======
+>>>>>>> Stashed changes
   useEffect(() => {
     const interval = setInterval(() => {
       const participantsToRemove = getInactiveParticipants(participants);
@@ -36,6 +46,10 @@ export default function Call() {
         removeParticipant(p.mediaConnection.peer);
       });
     }, 500);
+<<<<<<< Updated upstream
+=======
+>>>>>>> upstream/main
+>>>>>>> Stashed changes
     return () => {
       clearInterval(interval);
     };
@@ -62,6 +76,62 @@ export default function Call() {
         removeParticipant,
         updateLastHeartbeat,
       });
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+
+      if (!isHost()) {
+        setTimeout(() => {
+          const userToCall = getHostId();
+          const call = createdPeer!.call(userToCall, myMediaStream);
+          call.on("stream", (mediaStream) => {
+            addParticipant(setParticipants, {
+              mediaConnection: call,
+              mediaStream: mediaStream,
+            });
+          });
+        }, 2000);
+
+        createdPeer.on("connection", (conn) => {
+          conn.on("data", (data) => {
+            // @ts-ignore
+            if (data?.type === "notify-connected-partcipants") {
+              const { peerIdsToCall, participantsToDisconnect } =
+                handleNotifyConnectedParticipants(
+                  createdPeer.id,
+                  // @ts-ignore
+                  data.peerIds,
+                  participantsStore.getState().participants
+                );
+
+              peerIdsToCall.forEach((peerId) => {
+                const call = createdPeer!.call(peerId, myMediaStream);
+                call.on("stream", (mediaStream) => {
+                  addParticipant(setParticipants, {
+                    mediaConnection: call,
+                    mediaStream: mediaStream,
+                  });
+                });
+              });
+
+              participantsToDisconnect.forEach((participant) => {
+                removeParticipant(
+                  setParticipants,
+                  participant.mediaConnection.peer
+                );
+                participant.mediaConnection.close();
+              });
+            }
+          });
+
+          setInterval(() => {
+            conn.send({ type: "heartbeat" });
+          }, 500);
+        });
+      }
+=======
+>>>>>>> upstream/main
+>>>>>>> Stashed changes
     })();
   }, []);
 
@@ -115,27 +185,43 @@ export default function Call() {
           <h1 className=" h2 text-center text-2xl m-2">
             Here is call the call, I am {myPeer?.id}.
           </h1>
-          <div className="flex justify-around">
+          <div className="flex justify-center mt-8">
             <button
+<<<<<<< HEAD
+              class="material-symbols-outlined"
+              className="bg-gray-50 hover:bg-gray-100 active:bg-gray-200  rounded-full shadow-md cursor-pointer size-12 scale-125 mx-4 material-symbols-outlined "
+=======
               className="bg-gray-50 hover:bg-gray-100 active:bg-gray-200  rounded-md shadow-md cursor-pointer m-2 w-1/4"
               onClick={handleScreenshare}
+<<<<<<< Updated upstream
             >
               {!myScreensharePeer ? "Screenshare on" : "Screenshare off"}
             </button>
             <button
               className="bg-gray-50 hover:bg-gray-100 active:bg-gray-200  rounded-md shadow-md cursor-pointer m-2 w-1/4"
               onClick={handleMicrophone}
+=======
+>>>>>>> Stashed changes
             >
-              {micStatus ? "Mic On" : "Mic Off"}
+              {!myScreensharePeer ? "Screenshare on" : "Screenshare off"}
             </button>
             <button
-              className="bg-gray-50 hover:bg-gray-100 active:bg-gray-200 rounded-md shadow-md cursor-pointer m-2 w-1/4"
+              className="bg-gray-50 hover:bg-gray-100 active:bg-gray-200  rounded-md shadow-md cursor-pointer m-2 w-1/4"
+>>>>>>> upstream/main
+              onClick={handleMicrophone}
+            >
+              {micStatus ? " mic" : "mic_off"}
+            </button>
+            <button
+              class="material-symbols-outlined"
+              className="bg-gray-50 hover:bg-gray-100 active:bg-gray-200 rounded-full shadow-md cursor-pointer size-12 scale-125 mx-4 material-symbols-outlined"
               onClick={handleVideo}
             >
-              {videoStatus ? "Video On" : "Video Off"}
+              {videoStatus ? " videocam" : "videocam_off"}
             </button>
           </div>
         </div>
+
         <div className="grid xl:grid-cols-2 sm:grid-cols-1 gap-6 p-5  grow">
           <VideoElement videoRef={myVideoRef} isMe />
           {myScreensharePeer && (
